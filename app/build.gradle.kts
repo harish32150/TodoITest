@@ -71,7 +71,8 @@ dependencies {
 
     /* network */
     implementation(libs.retrofit2)
+    implementation(libs.okhttp.logging.interceptor)
     implementation(libs.retrofit2.converter.moshi)
-    implementation(libs.moshi)
-    ksp(libs.moshi.kotlin.codegen)
+    implementation(libs.moshi.kotlin)
+    implementation(libs.moshi.adapters)
 }
