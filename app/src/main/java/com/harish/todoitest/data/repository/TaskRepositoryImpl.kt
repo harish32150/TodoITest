@@ -6,14 +6,17 @@ import com.harish.todoitest.domain.KResult
 import com.harish.todoitest.domain.entity.Task
 import com.harish.todoitest.domain.repository.TaskRepository
 import com.harish.todoitest.domain.runCatchingResult
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 internal class TaskRepositoryImpl @Inject constructor(
     private val db: TaskDatabase
 ): TaskRepository {
     override suspend fun fetchAll(): KResult<List<Task>> = runCatchingResult {
-        db.taskDao().taskList()
+        db.taskDao().list()
     }
+
+    override fun streamAll(): Flow<List<Task>> = db.taskDao().streamList()
 
     override suspend fun create(label: String): KResult<Long> = runCatchingResult {
         TaskEntity(label)
