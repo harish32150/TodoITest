@@ -53,6 +53,7 @@ object NetworkModule {
             .client(client)
             .addCallAdapterFactory(KResultRetrofitCallAdapterFactory(moshi))
             .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .baseUrl("http://10.0.2.2:3003")
             .build()
             .create(RestApi::class.java)
 }

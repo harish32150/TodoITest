@@ -63,9 +63,9 @@ dependencies {
     implementation(libs.androidx.worker)
 
     /* navigation */
-//    implementation(libs.androidx.compose.navigation)
-//    implementation(libs.androidx.hilt.navigation.compose)
-//    implementation(libs.accompanist.navigation.material)
+    implementation(libs.androidx.compose.navigation)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.accompanist.navigation.material)
 
     /* room */
     implementation(libs.room.runtime)

@@ -19,7 +19,7 @@ class OnboardingViewModel @Inject constructor(
     private val authenticationRepository: AuthenticationRepository
 ): ViewModel() {
     val isAuthenticatedFlow = flow<Boolean> {
-        delay(1500)
+        delay(500)
         emit(authenticationRepository.isAuthenticated())
     }
 
