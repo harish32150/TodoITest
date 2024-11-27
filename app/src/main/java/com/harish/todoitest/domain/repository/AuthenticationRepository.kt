@@ -6,4 +6,6 @@ interface AuthenticationRepository {
     suspend fun login(username: String, password: String): KResult<String>
 
     suspend fun register(username: String, password: String): KResult<Long>
+
+    suspend fun isAuthenticated(): Boolean
 }

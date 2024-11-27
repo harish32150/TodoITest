@@ -1,4 +1,4 @@
-package com.harish.todoitest
+package com.harish.todoitest.ui.onboarding
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.harish.todoitest.ui.theme.TodoITestTheme
 
-class MainActivity : ComponentActivity() {
+class OnboardingActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

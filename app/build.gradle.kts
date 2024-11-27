@@ -2,7 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.ksp)
+//    alias(libs.plugins.ksp)
+    kotlin("kapt")// version "2.0.21"
+    alias(libs.plugins.dagger.hilt)
 }
 
 android {
@@ -60,14 +62,21 @@ dependencies {
 
     implementation(libs.androidx.worker)
 
+    /* navigation */
+//    implementation(libs.androidx.compose.navigation)
+//    implementation(libs.androidx.hilt.navigation.compose)
+//    implementation(libs.accompanist.navigation.material)
+
     /* room */
     implementation(libs.room.runtime)
-    ksp(libs.room.compiler)
+    kapt(libs.room.compiler)
     implementation(libs.room.ktx)
 
     /* hilt */
     implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
+    kapt(libs.hilt.compiler)
+
+//    implementation(libs.javapoet)
 
     /* network */
     implementation(libs.retrofit2)
@@ -75,4 +84,12 @@ dependencies {
     implementation(libs.retrofit2.converter.moshi)
     implementation(libs.moshi.kotlin)
     implementation(libs.moshi.adapters)
+}
+
+kapt {
+    correctErrorTypes = true
+}
+
+hilt {
+    enableAggregatingTask = false
 }
