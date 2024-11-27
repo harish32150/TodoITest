@@ -16,4 +16,6 @@ interface TaskRepository {
     suspend fun update(id: Long, task: Task): KResult<Unit>
 
     suspend fun delete(id: Long): KResult<Unit>
+
+    suspend fun syncPendingList(): KResult<List<Task>>
 }

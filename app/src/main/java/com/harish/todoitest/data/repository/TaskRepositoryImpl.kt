@@ -37,4 +37,8 @@ internal class TaskRepositoryImpl @Inject constructor(
         db.taskDao().get(id).copy(isDeleted = true)
             .let { db.taskDao().update(it) }
     }
+
+    override suspend fun syncPendingList(): KResult<List<Task>> = runCatchingResult {
+        db.taskDao().pendingSyncTaskList()
+    }
 }

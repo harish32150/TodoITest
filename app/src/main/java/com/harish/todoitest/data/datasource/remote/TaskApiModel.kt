@@ -13,4 +13,7 @@ internal data class TaskApiModel(
         label = from.label,
         isCompleted = from.isCompleted
     )
+
+    override val isSynced: Boolean
+        get() = true
 }

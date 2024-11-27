@@ -31,4 +31,7 @@ internal data class TaskEntity(
         isUpdated = false,
         isDeleted = false
     )
+
+    override val isSynced: Boolean
+        get() = !isNew && !isUpdated && !isDeleted
 }
