@@ -13,7 +13,7 @@ import androidx.navigation.NavHostController
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-internal fun SplashView(navController: NavHostController) {
+internal fun SplashView(navController: NavHostController, navigateToHome: () -> Unit) {
     val viewModel = hiltViewModel<OnboardingViewModel>()
 
     Box(
@@ -25,11 +25,8 @@ internal fun SplashView(navController: NavHostController) {
 
     LaunchedEffect(Unit) {
         viewModel.isAuthenticatedFlow.collectLatest {
-            if (it) {
-                /*todo navigate to home*/
-            } else {
-                navController.navigate(OnboardingNavDestination.Authentication.route)
-            }
+            if (it) navigateToHome.invoke()
+            else navController.navigate(OnboardingNavDestination.Authentication.route)
         }
     }
 }

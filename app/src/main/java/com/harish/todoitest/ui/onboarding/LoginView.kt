@@ -20,18 +20,27 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.harish.todoitest.domain.handle
+import com.harish.todoitest.ui.toast
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun LoginView(navController: NavHostController) {
+internal fun LoginView(navController: NavHostController, navigateToHome: () -> Unit) {
+    val viewModel = hiltViewModel<OnboardingViewModel>()
+    val context = LocalContext.current
+
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
@@ -72,9 +81,14 @@ internal fun LoginView(navController: NavHostController) {
 
             Button(
                 onClick = {
-                    isLoading = true
-                    // Perform login and handle result
-                    // Example: navController.navigate("home") if success
+                    when {
+                        username.isEmpty() -> "Username required"
+                        password.isEmpty() -> "Password required"
+                        else -> null
+                    }.also {
+                        if (it == null) viewModel.login(username, password)
+                        else context.toast(it)
+                    }
                 },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !isLoading
@@ -91,9 +105,22 @@ internal fun LoginView(navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            TextButton(onClick = { navController.navigate("register") }) {
+            TextButton(onClick = { navController.navigate(OnboardingNavDestination.Register.route) }) {
                 Text("Don't have an account? Register")
             }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.loginResultFlow.collectLatest { result ->
+            result.handle(
+                onSuccess = {
+                    context.toast("Logged in successfully")
+                    navigateToHome.invoke()
+                },
+                onLoading = { isLoading = it },
+                onError = { context.toast(it.message ?: it.toString()) }
+            )
         }
     }
 }

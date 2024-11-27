@@ -1,5 +1,6 @@
 package com.harish.todoitest.ui.onboarding
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,9 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
-import androidx.navigation.NavHost
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -22,8 +20,10 @@ import com.google.accompanist.navigation.material.ExperimentalMaterialNavigation
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.bottomSheet
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
+import com.harish.todoitest.ui.home.HomeActivity
 import com.harish.todoitest.ui.theme.TodoITestTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @ExperimentalMaterialNavigationApi
 @AndroidEntryPoint
@@ -34,10 +34,15 @@ class OnboardingActivity : ComponentActivity() {
         setContent {
             TodoITestTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    OnboardingNavGraph(innerPadding = innerPadding)
+                    OnboardingNavGraph(innerPadding = innerPadding, ::navigateToHome)
                 }
             }
         }
+    }
+
+    private fun navigateToHome() {
+        startActivity(Intent(this, HomeActivity::class.java))
+        finish()
     }
 }
 
@@ -59,7 +64,7 @@ fun GreetingPreview() {
 
 @ExperimentalMaterialNavigationApi
 @Composable
-private fun OnboardingNavGraph(innerPadding: PaddingValues) {
+private fun OnboardingNavGraph(innerPadding: PaddingValues, navigateToHome: () -> Unit) {
     val bottomSheetNavigator = rememberBottomSheetNavigator()
     val navController = rememberNavController(bottomSheetNavigator)
     ModalBottomSheetLayout(bottomSheetNavigator) {
@@ -69,13 +74,13 @@ private fun OnboardingNavGraph(innerPadding: PaddingValues) {
             startDestination = OnboardingNavDestination.Splash.route
         ) {
             composable(OnboardingNavDestination.Splash.route) {
-                SplashView(navController)
+                SplashView(navController, navigateToHome)
             }
             composable(OnboardingNavDestination.Authentication.route) {
                 AuthView(navController)
             }
             bottomSheet(OnboardingNavDestination.Login.route) {
-                LoginView(navController)
+                LoginView(navController, navigateToHome)
             }
             bottomSheet(OnboardingNavDestination.Register.route) {
                 RegisterView(navController)
