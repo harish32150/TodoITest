@@ -11,11 +11,13 @@ interface TaskRepository {
 
     suspend fun create(label: String): KResult<Long>
 
-    suspend fun create(task: Task): KResult<Unit>
+    suspend fun create(task: Task): KResult<Long>
 
     suspend fun update(id: Long, task: Task): KResult<Unit>
 
     suspend fun delete(id: Long): KResult<Unit>
 
     suspend fun syncPendingList(): KResult<List<Task>>
+
+    suspend fun markCompleted(id: Long, isCompleted: Boolean): KResult<Unit>
 }

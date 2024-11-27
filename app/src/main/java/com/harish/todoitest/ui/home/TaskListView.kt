@@ -9,7 +9,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.twotone.Done
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -25,10 +28,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.harish.todoitest.R
 import com.harish.todoitest.domain.entity.Task
 
 @Composable
@@ -44,22 +49,23 @@ internal fun TaskListView(navController: NavHostController) {
             /* todo - empty state */
         } else items(
             items = taskList,
-            itemContent = { task -> TaskItemView(task) }
+            itemContent = { task -> TaskItemView(task, viewModel::markCompleted) }
         )
     }
 }
 
 @Composable
-private fun TaskItemView(task: Task) {
+private fun TaskItemView(task: Task, markCompleted: (Long, Boolean) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     Card(
         shape = RoundedCornerShape(12.dp),
-        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Checkbox(checked = task.isCompleted, onCheckedChange = {
-                /*todo*/
+                markCompleted(task.id, it)
             })
 
             Text(
@@ -88,6 +94,10 @@ private fun TaskItemView(task: Task) {
                     })
                 }
             }
+        }
+
+        if (task.isSynced) {
+            Icon(painterResource(R.drawable.rounded_cloud_sync_24), "sync completed", modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp).align(Alignment.End), tint = MaterialTheme.colorScheme.primary)
         }
     }
 }

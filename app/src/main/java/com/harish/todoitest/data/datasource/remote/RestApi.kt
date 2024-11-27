@@ -6,6 +6,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Path
 
 internal interface RestApi {
     @POST("/auth/register")
@@ -21,8 +22,8 @@ internal interface RestApi {
     suspend fun createTask(@Body payload: TaskApiModel): KResult<TaskApiModel>
 
     @PUT("/tasks/{id}")
-    suspend fun updateTask(id: Long, @Body payload: TaskApiModel): KResult<TaskApiModel>
+    suspend fun updateTask(@Path("id") id: Long, @Body payload: TaskApiModel): KResult<TaskApiModel>
 
     @DELETE("/tasks/{id}")
-    suspend fun deleteTask(id: Long): KResult<Unit>
+    suspend fun deleteTask(@Path("id") id: Long): KResult<Unit>
 }

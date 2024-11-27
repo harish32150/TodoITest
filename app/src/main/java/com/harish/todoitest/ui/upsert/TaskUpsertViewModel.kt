@@ -24,7 +24,7 @@ class TaskUpsertViewModel @Inject constructor(
     fun createTask(label: String) {
         viewModelScope.launch {
             _createTaskResultFlow.emit(KResult.Loading)
-            _createTaskResultFlow.emit(taskRepository.create(label).onSuccess { syncUseCase.invoke(it) })
+            _createTaskResultFlow.emit(taskRepository.create(label))
         }
     }
 }
