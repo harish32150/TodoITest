@@ -1,5 +1,6 @@
 package com.harish.todoitest.ui.home
 
+import android.app.AlertDialog
 import android.icu.text.SimpleDateFormat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +28,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -42,11 +45,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.harish.todoitest.R
 import com.harish.todoitest.domain.entity.Task
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 @Composable
-internal fun TaskListView(navController: NavHostController) {
+internal fun TaskListView(
+    navController: NavHostController,
+    onLogout: () -> Unit
+) {
     val viewModel = hiltViewModel<HomeViewModel>()
+    val context = LocalContext.current
     val taskListState = viewModel.taskListStateFlow.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -66,7 +75,7 @@ internal fun TaskListView(navController: NavHostController) {
                 )
             }
 
-            IconButton(onClick = {/*logout*/ }) {
+            IconButton(onClick = { viewModel.checkCanLogout() }) {
                 Icon(
                     painterResource(R.drawable.logout_24dp_e8eaed_fill0_wght400_grad0_opsz24),
                     "logout"
@@ -100,6 +109,20 @@ internal fun TaskListView(navController: NavHostController) {
                     )
                 }
             )
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        launch {
+            viewModel.checkCanLogoutFlow.collectLatest {
+                if (it) onLogout()
+                else AlertDialog.Builder(context)
+                    .setPositiveButton("Cancel", null)
+                    .setNegativeButton("Confirm", { _dialog, _ -> onLogout(); _dialog.dismiss() })
+                    .setTitle("Are you sure?")
+                    .setMessage("You have unsynced tasks. Logging out now will result in losing these tasks. Are you sure you want to proceed?")
+                    .show()
+            }
         }
     }
 }

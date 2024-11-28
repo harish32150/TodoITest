@@ -41,4 +41,7 @@ internal interface TaskDao {
         insert(task)
         return get(task.id)
     }
+
+    @Query("DELETE  FROM tasks")
+    suspend fun deleteAll()
 }

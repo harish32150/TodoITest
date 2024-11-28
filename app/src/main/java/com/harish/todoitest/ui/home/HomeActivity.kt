@@ -1,5 +1,6 @@
 package com.harish.todoitest.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -27,13 +29,23 @@ import com.google.accompanist.navigation.material.ExperimentalMaterialNavigation
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.bottomSheet
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
+import com.harish.todoitest.domain.handle
+import com.harish.todoitest.domain.usecase.LogoutUseCase
+import com.harish.todoitest.ui.onboarding.OnboardingActivity
 import com.harish.todoitest.ui.theme.TodoITestTheme
+import com.harish.todoitest.ui.toast
 import com.harish.todoitest.ui.upsert.TaskUpsertView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @OptIn(ExperimentalMaterialNavigationApi::class)
 @AndroidEntryPoint
 class HomeActivity: ComponentActivity() {
+
+    @Inject
+    lateinit var logoutUseCase: LogoutUseCase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,7 +59,7 @@ class HomeActivity: ComponentActivity() {
                     Box(modifier = Modifier
                         .fillMaxSize()
                         .padding(paddingValues = innerPadding)) {
-                        HomeNavGraph(bottomSheetNavigator, navController)
+                        HomeNavGraph(bottomSheetNavigator, navController, ::handleLogoutAction)
 
                         FloatingActionButton(
                             modifier = Modifier
@@ -64,18 +76,35 @@ class HomeActivity: ComponentActivity() {
             }
         }
     }
+
+    private fun handleLogoutAction() {
+        lifecycleScope.launch {
+            logoutUseCase.invoke()
+                .handle(
+                    onSuccess = {
+                        startActivity(Intent(this@HomeActivity, OnboardingActivity::class.java))
+                        finish()
+                    },
+                    onError = { toast(it.message ?: it.toString()) }
+                )
+        }
+    }
 }
 
 @ExperimentalMaterialNavigationApi
 @Composable
-private fun HomeNavGraph(bottomSheetNavigator: BottomSheetNavigator, navController: NavHostController) {
+private fun HomeNavGraph(
+    bottomSheetNavigator: BottomSheetNavigator,
+    navController: NavHostController,
+    onLogout: () -> Unit
+) {
     ModalBottomSheetLayout(bottomSheetNavigator) {
         NavHost(
             navController = navController,
             startDestination = HomeNavDestination.TaskList.route
         ) {
             composable(HomeNavDestination.TaskList.route) {
-                TaskListView(navController)
+                TaskListView(navController, onLogout)
             }
             bottomSheet(
                 route = HomeNavDestination.TaskUpsert.run { "$BaseRoute?$TaskIdParam={$TaskIdParam}" },

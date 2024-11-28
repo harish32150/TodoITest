@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.harish.todoitest.data.AppPrefs
 import com.harish.todoitest.domain.KResult
+import com.harish.todoitest.domain.get
+import com.harish.todoitest.domain.onSuccess
 import com.harish.todoitest.domain.repository.TaskRepository
 import com.harish.todoitest.domain.usecase.SyncAllServerTaskUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,6 +48,15 @@ class HomeViewModel @Inject constructor(
     fun deleteTask(id: Long) {
         viewModelScope.launch {
             taskRepository.delete(id)
+        }
+    }
+
+    private val _checkCanLogoutFlow = MutableSharedFlow<Boolean>()
+    val checkCanLogoutFlow = _checkCanLogoutFlow.shareIn(viewModelScope, SharingStarted.Lazily)
+    fun checkCanLogout() {
+        viewModelScope.launch {
+            taskRepository.syncPendingList()
+                .onSuccess { _checkCanLogoutFlow.emit(it.isEmpty()) }
         }
     }
 }

@@ -1,8 +1,10 @@
 package com.harish.todoitest.data.di
 
+import com.harish.todoitest.data.usecase.LogoutUseCaseImpl
 import com.harish.todoitest.data.usecase.SyncAllServerTaskUseCaseImpl
 import com.harish.todoitest.data.usecase.SyncTaskUseCaseImpl
 import com.harish.todoitest.data.usecase.UpdateTaskLabelUseCaseImpl
+import com.harish.todoitest.domain.usecase.LogoutUseCase
 import com.harish.todoitest.domain.usecase.SyncAllServerTaskUseCase
 import com.harish.todoitest.domain.usecase.SyncTaskUseCase
 import com.harish.todoitest.domain.usecase.UpdateTaskLabelUseCase
@@ -26,4 +28,8 @@ abstract class UseCaseModule {
     @Binds
     @Singleton
     internal abstract fun bindSyncAllServerTaskUseCase(impl: SyncAllServerTaskUseCaseImpl): SyncAllServerTaskUseCase
+
+    @Binds
+    @Singleton
+    internal abstract fun bindLogoutUseCase(impl: LogoutUseCaseImpl): LogoutUseCase
 }
