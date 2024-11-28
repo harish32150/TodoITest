@@ -19,16 +19,20 @@ This is a native Android application that allows users to manage tasks with onli
 ## Screenshots
 
 ### Authentication
-![Login Screen](screenshots/login.png)
-![Register Screen](screenshots/register.png)
+<div style="display: flex; justify-content: space-around;">
+  <img src="screenshots/login.png" width="30%" />
+  <img src="screenshots/register.png" width="30%" />
+</div>
 
 ### Task List
-![Create Task](screenshots/create_task.png)
-![Update Task](screenshots/update_task.png)
-![Task List:Empty state](screenshots/empty_state.png)
-![Task List:Both synced/unsynced](screenshots/task_list_sync_unsynced_tasks.png)
-![Task List:All synced](screenshots/task_list_all_synced.png)
-![Logout Confirmation](screenshots/logout_confirmation.png)
+<div style="display: flex; justify-content: space-around;">
+  <img src="screenshots/create_task.png" width="30%" />
+  <img src="screenshots/update_task.png" width="30%" />
+  <img src="screenshots/empty_state.png" width="30%" />
+  <img src="screenshots/task_list_sync_unsynced_tasks.png" width="30%" />
+  <img src="screenshots/task_list_all_synced.png" width="30%" />
+  <img src="screenshots/logout_confirmation.png" width="30%" />
+</div>
 
 ## Prerequisites
 
