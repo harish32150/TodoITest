@@ -33,7 +33,7 @@ internal fun AuthView(navController: NavHostController) {
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Welcome to TaskApp",
+                text = "Welcome to ToDo App",
                 style = MaterialTheme.typography.headlineMedium
             )
         }
