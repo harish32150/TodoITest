@@ -14,10 +14,10 @@ internal interface TaskDao {
     @Query("SELECT * FROM tasks WHERE id = :id")
     suspend fun get(id: Long): TaskEntity
 
-    @Query("SELECT * FROM tasks WHERE isDeleted = 0 ORDER BY id DESC")
+    @Query("SELECT * FROM tasks WHERE isDeleted = 0 ORDER BY createdAt DESC")
     suspend fun list(): List<TaskEntity>
 
-    @Query("SELECT * FROM tasks WHERE isDeleted = 0 ORDER BY id DESC")
+    @Query("SELECT * FROM tasks WHERE isDeleted = 0 ORDER BY createdAt DESC")
     fun streamList(): Flow<List<TaskEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

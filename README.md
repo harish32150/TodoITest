@@ -16,6 +16,20 @@ This is a native Android application that allows users to manage tasks with onli
 
 ---
 
+## Screenshots
+
+### Authentication
+![Login Screen](screenshots/login.png)
+![Register Screen](screenshots/register.png)
+
+### Task List
+![Create Task](screenshots/create_task.png)
+![Update Task](screenshots/update_task.png)
+![Task List:Empty state](screenshots/empty_state.png)
+![Task List:Both synced/unsynced](screenshots/task_list_sync_unsynced_tasks.png)
+![Task List:All synced](screenshots/task_list_all_synced.png)
+![Logout Confirmation](screenshots/logout_confirmation.png)
+
 ## Prerequisites
 
 1. **Android Studio** (Ladybug or later)
