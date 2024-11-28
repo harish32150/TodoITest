@@ -3,12 +3,14 @@ package com.harish.todoitest.data.datasource.local
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.harish.todoitest.domain.entity.Task
+import java.util.Date
 
 @Entity(tableName = "tasks")
 internal data class TaskEntity(
     @PrimaryKey override val id: Long,
     override val label: String,
     override val isCompleted: Boolean,
+    override val createdAt: Date,
     /* sync params */
     val isNew: Boolean,
     val isUpdated: Boolean,
@@ -18,6 +20,7 @@ internal data class TaskEntity(
         id = from.id,
         label = from.label,
         isCompleted = from.isCompleted,
+        createdAt = from.createdAt,
         isNew = isNew,
         isDeleted = isUpdated,
         isUpdated = isDeleted
@@ -27,6 +30,7 @@ internal data class TaskEntity(
         id = 0,
         label = label,
         isCompleted = false,
+        createdAt = Date(),
         isNew = true,
         isUpdated = false,
         isDeleted = false

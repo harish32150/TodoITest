@@ -13,6 +13,9 @@ class SyncAllTaskUseCase @Inject constructor(
         taskRepository.syncPendingList()
             .map { taskList ->
                 /* check if all synced, return as flag to schedule retry */
-                taskList.map { syncTaskUseCase.invoke(it.id) }.all { it is KResult.Success }
+                taskList.takeIf { it.isNotEmpty() }
+                    ?.map { syncTaskUseCase.invoke(it.id) }
+                    ?.all { it is KResult.Success }
+                    ?: true
             }
 }

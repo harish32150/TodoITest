@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val taskRepository: TaskRepository,
+    private val taskRepository: TaskRepository
 ) : ViewModel() {
     val taskListStateFlow = taskRepository.streamAll()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())

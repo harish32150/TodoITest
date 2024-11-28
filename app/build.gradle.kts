@@ -75,9 +75,9 @@ dependencies {
     /* hilt */
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    kapt(libs.androidx.hilt.compiler)
     implementation(libs.hilt.work)
 
-//    implementation(libs.javapoet)
 
     /* network */
     implementation(libs.retrofit2)
