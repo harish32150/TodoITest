@@ -21,7 +21,7 @@ This is a native Android application that allows users to manage tasks with onli
 1. **Android Studio** (Ladybug or later)
 2. **Minimum SDK**: 24
 3. **Gradle**: Kotlin DSL-based configuration
-4. **Backend Server**: Ensure the backend server is running (refer to the [backend README](../backend/README.md)).
+4. **Backend Server**: Ensure the backend server is running (refer to the [backend README](https://github.com/harish32150/TodoITest/tree/master/backend)).
 
 ---
 
