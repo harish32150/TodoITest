@@ -53,14 +53,6 @@ Replace `database-url`, `server-port` with actual values.
 
 Create the PostgreSQL database and tables. Run the SQL script provided in `database/schema.sql` to set up the database schema.
 
-#### Steps to Run the Script:
-1. Open your PostgreSQL client or use a command-line tool.
-2. Execute the `database/schema.sql` file:
-
-```bash
-psql -U your_db_username -d postgres -a -f db/init.sql
-```
-
 ---
 
 ### Step 5: Run the Server
