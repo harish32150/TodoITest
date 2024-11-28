@@ -28,10 +28,11 @@ import androidx.navigation.NavHostController
 import com.harish.todoitest.domain.handle
 import com.harish.todoitest.ui.toast
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun TaskUpsertView(navController: NavHostController) {
+internal fun TaskUpsertView(navController: NavHostController, taskId: Long? = null) {
     val viewModel = hiltViewModel<TaskUpsertViewModel>()
     val context = LocalContext.current
 
@@ -48,7 +49,7 @@ internal fun TaskUpsertView(navController: NavHostController) {
                 .padding(16.dp)
         ) {
             Text(
-                text = "Create Task",
+                text = if (taskId == null) "Create Task" else "Update Task",
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
@@ -70,8 +71,11 @@ internal fun TaskUpsertView(navController: NavHostController) {
                         label.isEmpty() -> "Task is required"
                         else -> null
                     }.also {
-                        if (it == null) viewModel.createTask(label)
-                        else context.toast(it)
+                        when {
+                            it != null -> context.toast(it)
+                            taskId != null -> viewModel.updateTask(taskId, label)
+                            else -> viewModel.createTask(label)
+                        }
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
@@ -80,25 +84,54 @@ internal fun TaskUpsertView(navController: NavHostController) {
                 if (isLoading) {
                     CircularProgressIndicator(
                         color = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(20.dp),
+                        strokeWidth = 2.dp
                     )
                 } else {
-                    Text("Create")
+                    Text(if (taskId == null) "Create" else "Save")
                 }
             }
         }
     }
 
     LaunchedEffect(Unit) {
-        viewModel.createTaskResultFlow.collectLatest { result ->
-            result.handle(
-                onSuccess = {
-                    context.toast("Task Created")
-                    navController.popBackStack()
-                },
-                onLoading = { isLoading = it },
-                onError = { context.toast(it.message ?: it.toString()) }
-            )
+        taskId?.also { viewModel.fetch(it) }
+
+        launch {
+            viewModel.createTaskResultFlow.collectLatest { result ->
+                result.handle(
+                    onSuccess = {
+                        context.toast("Task Created")
+                        navController.popBackStack()
+                    },
+                    onLoading = { isLoading = it },
+                    onError = { context.toast(it.message ?: it.toString()) }
+                )
+            }
+        }
+
+        if (taskId != null) {
+            launch {
+                viewModel.editableTaskResultFlow.collectLatest { result ->
+                    result.handle(
+                        onSuccess = { label = it.label },
+                        onLoading = { isLoading = it },
+                        onError = { context.toast(it.message ?: it.toString()) }
+                    )
+                }
+            }
+            launch {
+                viewModel.updateTaskResultFlow.collectLatest { result ->
+                    result.handle(
+                        onSuccess = {
+                            context.toast("Task Saved")
+                            navController.popBackStack()
+                        },
+                        onLoading = { isLoading = it },
+                        onError = { context.toast(it.message ?: it.toString()) }
+                    )
+                }
+            }
         }
     }
 }

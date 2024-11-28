@@ -96,7 +96,8 @@ internal fun LoginView(navController: NavHostController, navigateToHome: () -> U
                 if (isLoading) {
                     CircularProgressIndicator(
                         color = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(20.dp),
+                        strokeWidth = 2.dp
                     )
                 } else {
                     Text("Login")

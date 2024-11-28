@@ -29,7 +29,10 @@ inline fun <T> KResult<T>.handle(
             onSuccess(value)
         }
         is KResult.Loading -> onLoading(true)
-        is KResult.Error -> onError(throwable)
+        is KResult.Error -> {
+            onLoading(false)
+            onError(throwable)
+        }
     }
 }
 
@@ -55,4 +58,14 @@ inline fun <T> KResult<T>.onSuccess(block: (T) -> Unit): KResult<T> {
 inline fun <T> KResult<T>.onError(block: (Throwable) -> Unit): KResult<T> {
     if (this is KResult.Error) block.invoke(throwable)
     return this
+}
+
+fun <T> KResult<T>.get(): T {
+    return if (this is KResult.Success) value
+    else error("result is not success")
+}
+
+fun <T> KResult<T>.getOrNull(): T? {
+    return if (this is KResult.Success) value
+    else null
 }

@@ -21,6 +21,10 @@ internal class TaskRepositoryImpl @Inject constructor(
 
     override fun streamAll(): Flow<List<Task>> = db.taskDao().streamList()
 
+    override suspend fun get(id: Long): KResult<Task> = runCatchingResult {
+        db.taskDao().get(id)
+    }
+
     override suspend fun create(label: String): KResult<Long> = runCatchingResult {
         TaskEntity(label)
             .let { db.taskDao().insert(it) }

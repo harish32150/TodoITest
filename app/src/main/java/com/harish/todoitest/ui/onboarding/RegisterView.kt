@@ -108,7 +108,8 @@ internal fun RegisterView(navController: NavController) {
                 if (isLoading) {
                     CircularProgressIndicator(
                         color = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(20.dp),
+                        strokeWidth = 2.dp
                     )
                 } else {
                     Text("Register")

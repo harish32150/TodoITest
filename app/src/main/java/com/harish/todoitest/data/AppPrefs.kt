@@ -14,4 +14,11 @@ class AppPrefs @Inject constructor(@ApplicationContext context: Context) {
             sharedPrefs.edit { putString("access_token", value) }
             field = value
         }
+
+    var username: String? = null
+        get() = sharedPrefs.getString("username", null)
+        set(value) {
+            sharedPrefs.edit { putString("username", value) }
+            field = value
+        }
 }

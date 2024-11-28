@@ -18,7 +18,10 @@ internal class AuthenticationRepositoryImpl @Inject constructor(
         LoginApiRequest(username, password)
             .let { api.login(it) }
             .map { it.accessToken }
-            .onSuccess { prefs.accessToken = it }
+            .onSuccess {
+                prefs.accessToken = it
+                prefs.username = username
+            }
 
 
     override suspend fun register(username: String, password: String): KResult<Long> =

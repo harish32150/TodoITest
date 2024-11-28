@@ -9,6 +9,8 @@ interface TaskRepository {
 
     fun streamAll(): Flow<List<Task>>
 
+    suspend fun get(id: Long): KResult<Task>
+
     suspend fun create(label: String): KResult<Long>
 
     suspend fun create(task: Task): KResult<Long>
