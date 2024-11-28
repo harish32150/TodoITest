@@ -1,5 +1,6 @@
 package com.harish.todoitest.data.network
 
+import com.harish.todoitest.BuildConfig
 import com.harish.todoitest.data.AppPrefs
 import com.harish.todoitest.data.datasource.remote.RestApi
 import com.squareup.moshi.Moshi
@@ -53,7 +54,7 @@ object NetworkModule {
             .client(client)
             .addCallAdapterFactory(KResultRetrofitCallAdapterFactory(moshi))
             .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .baseUrl("http://10.0.2.2:3003")
+            .baseUrl(BuildConfig.BASE_URL)
             .build()
             .create(RestApi::class.java)
 }

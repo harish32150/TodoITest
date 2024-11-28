@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -19,6 +21,18 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildFeatures.buildConfig = true
+
+        project.rootDir.resolve("local.properties").let { localPropertiesFile ->
+            if (localPropertiesFile.exists()) {
+                Properties()
+                    .apply { localPropertiesFile.inputStream().use { load(it) } }
+                    .getProperty("base_url")
+                    .also {
+                        buildConfigField("String", "BASE_URL", "\"$it\"")
+                    }
+            }
+        }
     }
 
     buildTypes {
